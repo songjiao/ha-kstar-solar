@@ -16,7 +16,6 @@ from homeassistant.const import (
     UnitOfPower,
     UnitOfArea,
     UnitOfMass,
-    CURRENCY_YUAN,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -148,7 +147,7 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
         elif unit == "kWh":
             return UnitOfEnergy.KILO_WATT_HOUR
         elif unit == "元":
-            return CURRENCY_YUAN
+            return "元"  # 直接使用字符串，不使用常量
         elif unit == "kg":
             return UnitOfMass.KILOGRAMS
         elif unit == "m²":
