@@ -36,9 +36,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Test the connection
     try:
-        await hass.async_add_executor_job(api.get_station_data)
+        await api.get_station_data()
     except Exception as ex:
         _LOGGER.error("Failed to connect to Kstar Solar API: %s", ex)
+        await api.close()
         raise ConfigEntryNotReady from ex
 
     hass.data[DOMAIN][entry.entry_id] = api
@@ -53,7 +54,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         api = hass.data[DOMAIN].pop(entry.entry_id)
-        api.close()
+        await api.close()
 
     return unload_ok
 

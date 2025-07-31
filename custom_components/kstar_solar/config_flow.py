@@ -41,7 +41,8 @@ class KstarSolarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
                 
                 # Test the connection
-                await self.hass.async_add_executor_job(api.get_station_data)
+                await api.get_station_data()
+                await api.close()
                 
                 # Create the config entry
                 config_data = {

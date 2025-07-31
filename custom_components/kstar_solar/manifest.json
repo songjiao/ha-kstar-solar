@@ -4,7 +4,7 @@
   "documentation": "https://github.com/songjiao/ha-kstar-solar",
   "dependencies": [],
   "codeowners": ["@songjiao"],
-  "requirements": ["requests>=2.25.0"],
+  "requirements": ["aiohttp>=3.8.0"],
   "version": "1.0.8",
   "iot_class": "cloud_polling",
   "config_flow": true

@@ -99,9 +99,16 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
 
         # Convert to appropriate type
         try:
-            return float(value)
+            if isinstance(value, (int, float)):
+                return value
+            elif isinstance(value, str):
+                # Try to convert string to float
+                return float(value)
+            else:
+                return value
         except (ValueError, TypeError):
-            return value
+            _LOGGER.warning("Could not convert value %s for sensor %s", value, self._sensor_type)
+            return None
 
     @property
     def available(self) -> bool:
@@ -110,41 +117,40 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
 
     def _get_device_class(self, device_class: str) -> SensorDeviceClass | None:
         """Get the device class."""
-        device_class_map = {
-            "power": SensorDeviceClass.POWER,
-            "energy": SensorDeviceClass.ENERGY,
-            "monetary": SensorDeviceClass.MONETARY,
-            "weight": SensorDeviceClass.WEIGHT,
-            "area": SensorDeviceClass.AREA,
-        }
-        return device_class_map.get(device_class)
+        if device_class == "power":
+            return SensorDeviceClass.POWER
+        elif device_class == "energy":
+            return SensorDeviceClass.ENERGY
+        elif device_class == "monetary":
+            return SensorDeviceClass.MONETARY
+        elif device_class == "weight":
+            return SensorDeviceClass.WEIGHT
+        elif device_class == "area":
+            return SensorDeviceClass.AREA
+        return None
 
     def _get_state_class(self, sensor_type: str) -> SensorStateClass | None:
         """Get the state class."""
-        # Power sensors are measurement, energy sensors are total
-        if sensor_type == "real_power":
+        if sensor_type in ["realPower"]:
             return SensorStateClass.MEASUREMENT
-        elif sensor_type in [
-            "day_generation",
-            "month_generation",
-            "year_generation",
-            "total_generation",
-            "day_earn",
-            "total_earn",
-            "co2",
-            "coal",
-            "forest",
-        ]:
+        elif sensor_type in ["dayGeneration", "monthGeneration", "yearGeneration", "totalGeneration"]:
+            return SensorStateClass.TOTAL
+        elif sensor_type in ["dayEarn", "totalEarn"]:
+            return SensorStateClass.TOTAL
+        elif sensor_type in ["co2", "coal", "forest"]:
             return SensorStateClass.TOTAL
         return None
 
     def _get_unit_of_measurement(self, unit: str) -> str | None:
         """Get the unit of measurement."""
-        unit_map = {
-            "W": UnitOfPower.WATT,
-            "kWh": UnitOfEnergy.KILO_WATT_HOUR,
-            "CNY": CURRENCY_YUAN,
-            "kg": UnitOfMass.KILOGRAMS,
-            "m²": UnitOfArea.SQUARE_METERS,
-        }
-        return unit_map.get(unit, unit) 
+        if unit == "W":
+            return UnitOfPower.WATT
+        elif unit == "kWh":
+            return UnitOfEnergy.KILO_WATT_HOUR
+        elif unit == "元":
+            return CURRENCY_YUAN
+        elif unit == "kg":
+            return UnitOfMass.KILOGRAMS
+        elif unit == "m²":
+            return UnitOfArea.SQUARE_METERS
+        return unit 
