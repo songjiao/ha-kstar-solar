@@ -79,4 +79,8 @@ class KstarSolarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     "无需用户名密码，配置一次长期有效。"
                 )
             },
-        ) 
+        )
+
+    async def async_step_import(self, import_info: Dict[str, Any]) -> FlowResult:
+        """Set up this integration using yaml."""
+        return await self.async_step_user(import_info) 
