@@ -55,4 +55,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         api = hass.data[DOMAIN].pop(entry.entry_id)
         api.close()
 
-    return unload_ok 
+    return unload_ok
+
+
+# Import config flow to register it
+from . import config_flow 

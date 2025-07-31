@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kstar Solar Inverter Configuration",
+        "description": "Please enter your Kstar Solar Inverter configuration information",
+        "data": {
+          "host": "Backend URL",
+          "station_id": "Station ID",
+          "refresh_token": "Refresh Token"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Kstar Solar Inverter",
+      "invalid_auth": "Authentication failed",
+      "unknown": "Unknown error"
+    },
+    "abort": {
+      "already_configured": "Device is already configured"
+    }
+  }
+} 

@@ -3,8 +3,9 @@
   "name": "Kstar Solar Inverter",
   "documentation": "https://github.com/songjiao/ha-kstar-solar",
   "dependencies": [],
-  "codeowners": [],
+  "codeowners": ["@songjiao"],
   "requirements": ["requests>=2.25.0"],
   "version": "1.0.7",
-  "iot_class": "cloud_polling"
+  "iot_class": "cloud_polling",
+  "config_flow": true
 } 
