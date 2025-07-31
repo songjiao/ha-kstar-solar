@@ -87,6 +87,10 @@ class KstarSolarAPI:
 
     async def get_station_data(self) -> Dict[str, Any]:
         """获取电站数据"""
+        # 确保有有效的access_token
+        if not self.access_token:
+            await self._get_access_token_from_refresh_token()
+        
         try:
             session = await self._get_session()
             
@@ -94,41 +98,68 @@ class KstarSolarAPI:
                 f"{self.host}{STATION_DETAIL_URL}",
                 params={"stationId": self.station_id},
             ) as response:
-                response.raise_for_status()
-                data = await response.json()
-                
-                if data.get("code") != 200:
-                    error_msg = data.get("message", "Unknown error")
-                    _LOGGER.error("获取电站数据失败: %s", error_msg)
-                    raise Exception(f"获取电站数据失败: {error_msg}")
-                
-                return data.get("data", {})
-                
-        except aiohttp.ClientError as e:
-            _LOGGER.error("获取数据请求失败: %s", e)
-            # token过期自动刷新
-            await self._get_access_token_from_refresh_token()
-            
-            try:
-                session = await self._get_session()
-                async with session.get(
-                    f"{self.host}{STATION_DETAIL_URL}",
-                    params={"stationId": self.station_id},
-                ) as response:
+                if response.status == 401:
+                    _LOGGER.info("Token已过期，尝试刷新")
+                    await self._get_access_token_from_refresh_token()
+                    # 重新创建session以使用新的token
+                    await self.close()
+                    session = await self._get_session()
+                    
+                    async with session.get(
+                        f"{self.host}{STATION_DETAIL_URL}",
+                        params={"stationId": self.station_id},
+                    ) as retry_response:
+                        retry_response.raise_for_status()
+                        data = await retry_response.json()
+                        
+                        if data.get("code") != 200:
+                            error_msg = data.get("message", "Unknown error")
+                            _LOGGER.error("获取电站数据失败: %s", error_msg)
+                            raise Exception(f"获取电站数据失败: {error_msg}")
+                        
+                        return data.get("data", {})
+                else:
                     response.raise_for_status()
                     data = await response.json()
                     
                     if data.get("code") != 200:
                         error_msg = data.get("message", "Unknown error")
+                        _LOGGER.error("获取电站数据失败: %s", error_msg)
                         raise Exception(f"获取电站数据失败: {error_msg}")
                     
                     return data.get("data", {})
-                    
-            except Exception as retry_error:
-                _LOGGER.error("刷新token后重试失败: %s", retry_error)
-                raise Exception(f"获取电站数据失败: {retry_error}")
+                
+        except aiohttp.ClientError as e:
+            _LOGGER.error("获取数据请求失败: %s", e)
+            # 如果是401错误，尝试刷新token
+            if "401" in str(e):
+                _LOGGER.info("检测到401错误，尝试刷新token")
+                await self._get_access_token_from_refresh_token()
+                await self.close()
+                
+                try:
+                    session = await self._get_session()
+                    async with session.get(
+                        f"{self.host}{STATION_DETAIL_URL}",
+                        params={"stationId": self.station_id},
+                    ) as response:
+                        response.raise_for_status()
+                        data = await response.json()
+                        
+                        if data.get("code") != 200:
+                            error_msg = data.get("message", "Unknown error")
+                            raise Exception(f"获取电站数据失败: {error_msg}")
+                        
+                        return data.get("data", {})
+                        
+                except Exception as retry_error:
+                    _LOGGER.error("刷新token后重试失败: %s", retry_error)
+                    raise Exception(f"获取电站数据失败: {retry_error}")
+            else:
+                raise Exception(f"获取电站数据失败: {e}")
 
     async def close(self) -> None:
         """关闭会话"""
         if self.session and not self.session.closed:
-            await self.session.close() 
+            await self.session.close()
+            self.session = None 
