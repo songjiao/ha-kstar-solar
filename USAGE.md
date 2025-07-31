@@ -9,7 +9,7 @@
 
 ### 2. 安装插件
 ```bash
-wget https://raw.githubusercontent.com/your-repo/kstar_solar/main/install.sh
+wget https://raw.githubusercontent.com/songjiao/ha-kstar-solar/main/install.sh
 chmod +x install.sh
 ./install.sh
 ```

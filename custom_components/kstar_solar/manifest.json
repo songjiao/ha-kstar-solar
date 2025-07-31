@@ -1,7 +1,7 @@
 {
   "domain": "kstar_solar",
   "name": "Kstar Solar Inverter",
-  "documentation": "https://github.com/your-repo/kstar_solar",
+  "documentation": "https://github.com/songjiao/ha-kstar-solar",
   "dependencies": [],
   "codeowners": [],
   "requirements": ["requests>=2.25.0"],
