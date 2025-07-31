@@ -3,12 +3,11 @@
     "step": {
       "user": {
         "title": "科士达光伏逆变器配置",
-        "description": "请输入您的科士达光伏逆变器登录信息",
+        "description": "请输入您的科士达光伏逆变器配置信息",
         "data": {
           "host": "后台地址",
-          "username": "用户名",
-          "password": "密码",
-          "station_id": "电站ID"
+          "station_id": "电站ID",
+          "refresh_token": "刷新令牌"
         }
       }
     },
