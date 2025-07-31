@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kstar Solar Inverter Configuration",
+        "description": "Please enter your Kstar Solar Inverter credentials",
+        "data": {
+          "host": "Host URL",
+          "username": "Username",
+          "password": "Password",
+          "station_id": "Station ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Kstar Solar Inverter",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Device is already configured"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "kstar_solar_real_power": {
+        "name": "Real Power"
+      },
+      "kstar_solar_day_generation": {
+        "name": "Day Generation"
+      },
+      "kstar_solar_month_generation": {
+        "name": "Month Generation"
+      },
+      "kstar_solar_year_generation": {
+        "name": "Year Generation"
+      },
+      "kstar_solar_total_generation": {
+        "name": "Total Generation"
+      },
+      "kstar_solar_day_earn": {
+        "name": "Day Earnings"
+      },
+      "kstar_solar_total_earn": {
+        "name": "Total Earnings"
+      },
+      "kstar_solar_co2": {
+        "name": "CO2 Reduction"
+      },
+      "kstar_solar_coal": {
+        "name": "Coal Saved"
+      },
+      "kstar_solar_forest": {
+        "name": "Forest Equivalent"
+      }
+    }
+  }
+} 

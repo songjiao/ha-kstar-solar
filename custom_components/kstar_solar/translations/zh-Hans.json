@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "科士达光伏逆变器配置",
+        "description": "请输入您的科士达光伏逆变器登录信息",
+        "data": {
+          "host": "后台地址",
+          "username": "用户名",
+          "password": "密码",
+          "station_id": "电站ID"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "连接科士达光伏逆变器失败",
+      "invalid_auth": "认证失败",
+      "unknown": "未知错误"
+    },
+    "abort": {
+      "already_configured": "设备已配置"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "kstar_solar_real_power": {
+        "name": "实时功率"
+      },
+      "kstar_solar_day_generation": {
+        "name": "日发电量"
+      },
+      "kstar_solar_month_generation": {
+        "name": "月发电量"
+      },
+      "kstar_solar_year_generation": {
+        "name": "年发电量"
+      },
+      "kstar_solar_total_generation": {
+        "name": "总发电量"
+      },
+      "kstar_solar_day_earn": {
+        "name": "日收益"
+      },
+      "kstar_solar_total_earn": {
+        "name": "总收益"
+      },
+      "kstar_solar_co2": {
+        "name": "CO2减排量"
+      },
+      "kstar_solar_coal": {
+        "name": "节约煤炭"
+      },
+      "kstar_solar_forest": {
+        "name": "森林当量"
+      }
+    }
+  }
+} 

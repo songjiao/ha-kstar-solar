@@ -1,0 +1,10 @@
+{
+  "domain": "kstar_solar",
+  "name": "Kstar Solar Inverter",
+  "documentation": "https://github.com/your-repo/kstar_solar",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": ["requests>=2.25.0"],
+  "version": "1.0.0",
+  "iot_class": "cloud_polling"
+} 
