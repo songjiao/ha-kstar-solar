@@ -132,8 +132,10 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
         """Get the state class."""
         if sensor_type in ["realPower"]:
             return SensorStateClass.MEASUREMENT
-        elif sensor_type in ["dayGeneration", "monthGeneration", "yearGeneration", "totalGeneration"]:
+        elif sensor_type in ["dayGeneration", "monthGeneration", "yearGeneration"]:
             return SensorStateClass.TOTAL
+        elif sensor_type in ["totalGeneration"]:
+            return SensorStateClass.TOTAL_INCREASING
         elif sensor_type in ["dayEarn", "totalEarn"]:
             return SensorStateClass.TOTAL
         elif sensor_type in ["co2", "coal", "forest"]:
