@@ -85,6 +85,7 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
             sensor_info["unit"]
         )
         self._attr_icon = sensor_info["icon"]
+        self._last_valid_value = None
 
     @property
     def native_value(self) -> StateType:
@@ -99,12 +100,27 @@ class KstarSolarSensor(CoordinatorEntity, SensorEntity):
         # Convert to appropriate type
         try:
             if isinstance(value, (int, float)):
-                return value
+                converted_value = value
             elif isinstance(value, str):
                 # Try to convert string to float
-                return float(value)
+                converted_value = float(value)
             else:
-                return value
+                converted_value = value
+
+            # 对于total_increasing类型的传感器，如果值为0且之前有有效值，则保持之前的值
+            if (self._attr_state_class == SensorStateClass.TOTAL_INCREASING and 
+                converted_value == 0 and 
+                hasattr(self, '_last_valid_value') and 
+                self._last_valid_value is not None and 
+                self._last_valid_value > 0):
+                _LOGGER.debug("传感器 %s 检测到0值，保持之前的有效值: %s", self._sensor_type, self._last_valid_value)
+                return self._last_valid_value
+            else:
+                # 更新最后有效值
+                if converted_value is not None and converted_value > 0:
+                    self._last_valid_value = converted_value
+                return converted_value
+
         except (ValueError, TypeError):
             _LOGGER.warning("Could not convert value %s for sensor %s", value, self._sensor_type)
             return None
