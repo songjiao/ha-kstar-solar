@@ -3,11 +3,12 @@
     "step": {
       "user": {
         "title": "科士达光伏逆变器配置",
-        "description": "请输入您的科士达光伏逆变器配置信息",
+        "description": "请输入您的科士达光伏逆变器配置信息。密码请从浏览器 Cookie 中的 passWord 字段获取。",
         "data": {
           "host": "后台地址",
           "station_id": "电站ID",
-          "refresh_token": "刷新令牌"
+          "username": "用户名",
+          "password": "密码（加密后）"
         }
       }
     },
@@ -54,4 +55,4 @@
       }
     }
   }
-} 
+}

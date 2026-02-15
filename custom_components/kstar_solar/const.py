@@ -9,7 +9,8 @@ DEFAULT_HOST = "http://solar.kstar.com.cn:9003"
 # 更新间隔
 SCAN_INTERVAL = timedelta(minutes=5)
 
-# API端点
+# API endpoints
+LOGIN_URL = "/prod-api/authentication/form"
 STATION_DETAIL_URL = "/prod-api/station/detail/earn"
 
 # 传感器类型

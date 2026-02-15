@@ -30,9 +30,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     api = KstarSolarAPI(
         host=entry.data["host"],
         station_id=entry.data["station_id"],
-        refresh_token=entry.data["refresh_token"],
+        username=entry.data["username"],
+        password=entry.data["password"],
     )
-    _LOGGER.info("使用刷新令牌认证方式")
 
     # Test the connection
     try:

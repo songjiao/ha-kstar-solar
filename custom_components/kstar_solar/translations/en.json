@@ -3,11 +3,12 @@
     "step": {
       "user": {
         "title": "Kstar Solar Inverter Configuration",
-        "description": "Please enter your Kstar Solar Inverter configuration information",
+        "description": "Please enter your Kstar Solar Inverter configuration. Get the encrypted password from the passWord field in your browser cookies.",
         "data": {
           "host": "Backend URL",
           "station_id": "Station ID",
-          "refresh_token": "Refresh Token"
+          "username": "Username",
+          "password": "Password (encrypted)"
         }
       }
     },
@@ -54,4 +55,4 @@
       }
     }
   }
-} 
+}

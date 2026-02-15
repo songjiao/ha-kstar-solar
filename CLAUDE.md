@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-科士达光伏逆变器 Home Assistant 集成 - A custom Home Assistant integration for Kstar Solar Inverters that fetches solar power generation data using refresh_token authentication.
+科士达光伏逆变器 Home Assistant 集成 - A custom Home Assistant integration for Kstar Solar Inverters that fetches solar power generation data using username + encrypted password authentication.
 
 ## Tech Stack
 
 - **Language**: Python 3.10+
 - **Framework**: Home Assistant Custom Integration
 - **HTTP Client**: aiohttp (async)
-- **Authentication**: OAuth2 refresh_token flow
+- **Authentication**: Username + encrypted password login, with refresh_token fallback
 
 ## Architecture
 
@@ -31,7 +31,7 @@ custom_components/kstar_solar/
 ## Key Patterns
 
 - **DataUpdateCoordinator**: All sensors share a single coordinator that polls the API
-- **Token Auto-Refresh**: `KstarSolarAPI._get_access_token_from_refresh_token()` handles 401 errors automatically
+- **Token Management**: `_login()` for initial auth, `_refresh_access_token()` tries refresh_token first then falls back to re-login
 - **State Class Handling**: `totalGeneration` uses `TOTAL_INCREASING` with zero-value protection to prevent statistics errors
 
 ## Development Commands
@@ -62,7 +62,8 @@ logger:
 ## API Details
 
 - **Base URL**: `http://solar.kstar.com.cn:9003`
-- **Auth Endpoint**: `/prod-api/oauth/token` (Basic auth: `kstar:kstarSecret`)
+- **Login Endpoint**: `POST /prod-api/authentication/form` (Basic auth: `kstar:kstarSecret`, multipart/form-data)
+- **Token Refresh Endpoint**: `/prod-api/oauth/token` (Basic auth: `kstar:kstarSecret`)
 - **Data Endpoint**: `/prod-api/station/detail/earn?stationId={id}`
 - **Token Format**: Bearer token in Authorization header
 

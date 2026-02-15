@@ -20,7 +20,7 @@ class InvalidAuth(HomeAssistantError):
 class KstarSolarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Kstar Solar Inverter."""
 
-    VERSION = 1
+    VERSION = 2
 
     async def async_step_user(
         self, user_input: Optional[Dict[str, Any]] = None
@@ -33,24 +33,25 @@ class KstarSolarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 host = user_input["host"].rstrip("/")
                 if not host.startswith(("http://", "https://")):
                     host = f"http://{host}"
-                
+
                 api = KstarSolarAPI(
                     host=host,
                     station_id=user_input["station_id"],
-                    refresh_token=user_input["refresh_token"],
+                    username=user_input["username"],
+                    password=user_input["password"],
                 )
-                
-                # Test the connection
+
+                # Test login and data fetch
                 await api.get_station_data()
                 await api.close()
-                
-                # Create the config entry
+
                 config_data = {
                     "host": host,
                     "station_id": user_input["station_id"],
-                    "refresh_token": user_input["refresh_token"],
+                    "username": user_input["username"],
+                    "password": user_input["password"],
                 }
-                
+
                 return self.async_create_entry(
                     title=f"Kstar Solar - {user_input['station_id']}",
                     data=config_data,
@@ -67,21 +68,16 @@ class KstarSolarConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         schema = vol.Schema({
             vol.Required("host", default=DEFAULT_HOST): str,
             vol.Required("station_id"): str,
-            vol.Required("refresh_token"): str,
+            vol.Required("username"): str,
+            vol.Required("password"): str,
         })
 
         return self.async_show_form(
             step_id="user",
             data_schema=schema,
             errors=errors,
-            description_placeholders={
-                "help_text": (
-                    "请在浏览器登录科士达后台，F12开发者工具Network中获取refresh_token。\n"
-                    "无需用户名密码，配置一次长期有效。"
-                )
-            },
         )
 
     async def async_step_import(self, import_info: Dict[str, Any]) -> FlowResult:
         """Set up this integration using yaml."""
-        return await self.async_step_user(import_info) 
+        return await self.async_step_user(import_info)
